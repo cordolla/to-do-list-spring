@@ -24,5 +24,7 @@ public class TaskController {
 
         var taskCriated = this.taskRepository.save(taskModel);
         return ResponseEntity.status(200).body("Task cadastrado com sucesso");
+
+
     }
 }

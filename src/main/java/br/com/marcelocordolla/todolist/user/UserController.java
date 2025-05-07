@@ -1,5 +1,6 @@
 package br.com.marcelocordolla.todolist.user;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +13,17 @@ public class UserController {
     private IUserRepository userRepository;
 
     @PostMapping("/")
-    public ResponseEntity create(@RequestBody UserModel userModel) {
-        var user = this.userRepository.findByUsername(userModel.getUsername());
+    public ResponseEntity<String> createUser(@RequestBody UserModel userModel) {
+        var existingUser = userRepository.findByUsername(userModel.getUsername());
 
-        if (user != null) {
+        if (existingUser != null) {
             return ResponseEntity.status(400).body("Usuario ja existe");
         }
+        var passwordHashred = BCrypt.withDefaults().hashToString(12, userModel.getPassword().toCharArray());
 
-        var userCriated = this.userRepository.save(userModel);
+        userModel.setPassword(passwordHashred);
+
+        userRepository.save(userModel);
         return ResponseEntity.status(200).body("Usuario cadastrado com sucesso");
     }
 }

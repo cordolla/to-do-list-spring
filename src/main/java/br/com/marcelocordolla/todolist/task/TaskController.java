@@ -38,4 +38,13 @@ public class TaskController {
         var tasks = this.taskRepository.findByUserId((UUID) userId);
         return tasks;
     }
+
+    @PutMapping("/{id}")
+    public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
+        var userId = request.getAttribute("idUser");
+        taskModel.setId((UUID) userId);
+        taskModel.setId(id);
+        return this.taskRepository.save(taskModel);
+
+    }
 }

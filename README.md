@@ -102,7 +102,7 @@ Basta configurar as variáveis de ambiente e o banco de dados.
 
 ## ✒️ Autores
 
-- **Seu Nome** — Desenvolvimento completo do sistema  
+- **Marcelo Barbosa** — Desenvolvimento completo do sistema  
 
 ---
 

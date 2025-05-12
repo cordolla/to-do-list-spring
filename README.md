@@ -1,133 +1,118 @@
-# 📝 ToDoList API - Spring Boot
+📝 ToDoList - Gerenciador de Tarefas
+Aplicação web simples de gerenciamento de tarefas com autenticação, utilizando Spring Boot e banco de dados relacional.
 
-API RESTful para gerenciamento de tarefas com autenticação via Basic Auth. Os usuários podem se cadastrar, fazer login e manipular tarefas (CRUD), com verificação de permissão para alteração de dados.
+🚀 Começando
+Essas instruções permitirão que você obtenha uma cópia do projeto funcionando localmente para fins de desenvolvimento e testes.
 
----
+Consulte a seção 📦 Implantação para saber como implantar o projeto em ambiente de produção.
 
-## 🚀 Tecnologias utilizadas
+📋 Pré-requisitos
+Antes de começar, você vai precisar ter instalado:
 
-- **Java 17**
-- **Spring Boot 3**
-- **Spring Web**
-- **Spring Data JPA**
-- **Hibernate**
-- **H2 Database (banco em memória)**
-- **Lombok**
-- **BCrypt (criptografia de senhas)**
-- **Jakarta Servlet**
-- **Favre BCrypt**
-- **UUID como identificador**
+Java 17+
 
----
+Maven 3.8+
 
-## 📂 Estrutura do Projeto
+IDE (recomendada: IntelliJ IDEA ou VSCode com suporte a Spring Boot)
 
-src
-└── main
-└── java
-└── br.com.marcelocordolla.todolist
-├── errors
-│ └── ExceptionHandlerController
-├── filter
-│ └── FilterTaskAuth
-├── task
-│ ├── TaskController
-│ ├── TaskModel
-│ └── ITaskRepository
-├── user
-│ ├── UserController
-│ ├── UserModel
-│ └── IUserRepository
-├── utils
-│ └── Utils
-└── TodolistApplication
+Banco de dados PostgreSQL (ou H2 se preferir)
 
-yaml
-Copiar
-Editar
+🔧 Instalação
+Siga os passos abaixo para configurar o ambiente:
 
----
-
-## 🔐 Autenticação
-
-A API usa **Basic Auth** para proteger as rotas de tarefas (`/tasks`). O filtro personalizado (`FilterTaskAuth`) valida usuário e senha usando BCrypt.
-
----
-
-## 👤 Endpoints de Usuário
-
-### `POST /users/`
-
-- Cria um novo usuário.
-- Verifica se o username já existe.
-- Senha é criptografada com BCrypt.
-
-```json
-{
-  "username": "usuario123",
-  "name": "Marcelo",
-  "password": "senha123"
-}
-✅ Endpoints de Tarefa (Requer autenticação)
-POST /tasks/
-Cria uma nova tarefa vinculada ao usuário autenticado.
-
-Valida se datas são futuras e coerentes.
-
-json
-Copiar
-Editar
-{
-  "title": "Estudar Spring",
-  "description": "Estudar REST e JPA",
-  "startAt": "2025-05-13T10:00:00",
-  "endAt": "2025-05-13T12:00:00",
-  "priority": "alta"
-}
-GET /tasks/
-Retorna as tarefas do usuário autenticado.
-
-PUT /tasks/{id}
-Atualiza os campos não nulos de uma tarefa, se for do usuário autenticado.
-
-Utiliza método utilitário para copiar apenas os campos preenchidos (Utils.copyNonNullProperties()).
-
-❗ Tratamento de Erros
-Exceções de requisição malformada são tratadas pela classe ExceptionHandlerController.
-
-Mensagens específicas de erro são retornadas com status 400 (Bad Request).
-
-🧪 Testar com cURL ou Postman
-Exemplo de autenticação Basic:
-bash
-Copiar
-Editar
-Authorization: Basic base64(username:senha)
-🧠 Regras de Negócio
-Usuários não podem alterar tarefas de outros.
-
-Datas inválidas não são aceitas.
-
-O título da tarefa deve ter até 50 caracteres.
-
-▶️ Como rodar
 Clone o repositório:
 
 bash
 Copiar
 Editar
-git clone https://github.com/seuusuario/todolist-spring.git
-cd todolist-spring
-Rode o projeto com Maven ou dentro do IntelliJ (botão "Run").
+git clone https://github.com/seu-usuario/todolist.git
+cd todolist
+Crie um banco de dados no PostgreSQL com nome todolist e configure as credenciais no arquivo application.properties.
 
-Acesse a API em:
+Execute a aplicação:
+
+bash
+Copiar
+Editar
+./mvnw spring-boot:run
+Acesse o endpoint:
 
 arduino
 Copiar
 Editar
 http://localhost:8080
-🧑‍💻 Autor
-Marcelo Barbosa
+✅ Funcionalidades
+Cadastro de usuários com senha criptografada
 
-📃 Licença
-Este projeto está licenciado sob a MIT License. A licença está declarada no código-fonte do projeto (não é armazenada em banco de dados).
+Autenticação via Basic Auth
+
+Criação de tarefas vinculadas a usuários
+
+Validação de datas (início e fim)
+
+Atualização apenas por quem criou a tarefa
+
+Filtro automático por usuário autenticado
+
+Camada de exceção global para erros de requisição
+
+⚙️ Executando os testes
+O projeto ainda não possui testes automatizados implementados. Porém, a arquitetura está preparada para receber testes com JUnit e Mockito.
+
+🔩 Testes de ponta a ponta
+Você pode testar os endpoints utilizando ferramentas como Postman ou Insomnia:
+
+POST /users - cria usuário
+
+POST /tasks/ - cria tarefa (com autenticação)
+
+GET /tasks/ - lista tarefas do usuário autenticado
+
+PUT /tasks/{id} - atualiza tarefa (se for do usuário)
+
+⌨️ Testes de estilo de codificação
+Recomenda-se seguir o padrão de código do Spring Boot e utilizar ferramentas como:
+
+Checkstyle
+
+SpotBugs
+
+SonarLint
+
+📦 Implantação
+Você pode implantar este projeto em qualquer serviço que suporte Java:
+
+Heroku
+
+Railway
+
+Render
+
+VPS com Docker
+
+Basta configurar as variáveis de ambiente e o banco de dados.
+
+🛠️ Construído com
+Spring Boot - Framework principal
+
+Spring Data JPA - Persistência de dados
+
+PostgreSQL - Banco de dados
+
+BCrypt - Criptografia de senhas
+
+Maven - Gerenciador de dependências
+
+✒️ Autores
+Marcelo Barbosa — Desenvolvimento completo do sistema
+@seu-usuario-no-github
+
+🎁 Expressões de gratidão
+Divulgue este projeto 📢
+
+Dê uma estrela ⭐ no repositório
+
+Me chame pra um café ☕ ou uma breja 🍻
+
+Obrigado pela visita 🫂
+

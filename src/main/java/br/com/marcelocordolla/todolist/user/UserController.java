@@ -2,6 +2,7 @@ package br.com.marcelocordolla.todolist.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,6 @@ public class UserController {
         userModel.setPassword(passwordHashred);
 
         userRepository.save(userModel);
-        return ResponseEntity.status(200).body("Usuario cadastrado com sucesso");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario cadastrado com sucesso");
     }
 }

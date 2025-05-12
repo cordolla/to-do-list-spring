@@ -1,5 +1,6 @@
 package br.com.marcelocordolla.todolist.task;
 
+import br.com.marcelocordolla.todolist.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class TaskController {
 
     @PostMapping("/")
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
-        taskModel.setUserId((UUID) request.getAttribute("idUser"));
+        taskModel.setUserId((UUID) request.getAttribute("userId"));
 
         var currentDate = LocalDateTime.now();
         if (currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) {
@@ -34,17 +35,33 @@ public class TaskController {
 
     @GetMapping("/")
     public List<TaskModel> list(HttpServletRequest request) {
-        var userId = request.getAttribute("idUser");
+        var userId = request.getAttribute("userId");
         var tasks = this.taskRepository.findByUserId((UUID) userId);
         return tasks;
     }
 
     @PutMapping("/{id}")
-    public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
-        var userId = request.getAttribute("idUser");
-        taskModel.setId((UUID) userId);
-        taskModel.setId(id);
-        return this.taskRepository.save(taskModel);
+    public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
+        var task = this.taskRepository.findById(id).orElse(null);
+
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("tarefa não encontrada");
+        }
+
+        var userId = request.getAttribute("userId");
+
+        System.out.println(userId);
+        System.out.println(task.getUserId());
+
+        if (!task.getUserId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Usuario não tem permisão para alterar essa tarefa");
+        }
+
+        Utils.copyNonNullProperties(taskModel, task);
+        var taskUpdated = this.taskRepository.save(task);
+        return ResponseEntity.ok().body(taskUpdated);
 
     }
 }

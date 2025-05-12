@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -25,16 +27,26 @@ public class TaskModel {
     private String description;
 
 
+    @Getter
     private LocalDateTime startAt;
+    @Getter
     private LocalDateTime endAt;
 
 
     private String priority;
 
+    @Setter
     private UUID userId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public void setTitle(String title) throws Exception {
+        if (title.length() > 50) {
+            throw new Exception("o campo title deve ter no maximo 50 caracteres");
+        }
+        this.title = title;
+    }
 
 
 }

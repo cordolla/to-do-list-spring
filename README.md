@@ -1,4 +1,4 @@
-# 📝 TaskManager - Gerenciador de Tarefas
+# 📝 ToDoList - Gerenciador de Tarefas
 
 Aplicação web simples para gerenciamento de tarefas, com autenticação, utilizando **Spring Boot** e **banco de dados relacional**.
 
